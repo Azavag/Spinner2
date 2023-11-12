@@ -8,10 +8,6 @@ public class MoneyManager : MonoBehaviour
     [SerializeField] int moneyCount;
     [SerializeField] TextMeshProUGUI moneyText;
 
-    private void Awake()
-    {
-        EventManager.EnemyDied += OnEnemyDied;
-    }
     void Start()
     {
         UpdateMoneyText();
@@ -31,14 +27,5 @@ public class MoneyManager : MonoBehaviour
     {
         return moneyCount;
     }
- 
 
-    void OnEnemyDied()
-    {
-        UpdateMoneyCount(1);
-    }
-    private void OnDestroy()
-    {
-        EventManager.EnemyDied -= OnEnemyDied;
-    }
 }

@@ -54,6 +54,7 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   deathClip: {fileID: -203655887218126122, guid: 1113d0a8bd73a534db033e6073b19dfa, type: 3}
   attackControllerZone: {fileID: 8051811236550105477}
+  soundController: {fileID: 304901972266290145, guid: c1dbaceb93900a7408b7c7c9c09e33d9, type: 3}
   enemyType: 0
   maxHealth: 30
   currentHealth: 30

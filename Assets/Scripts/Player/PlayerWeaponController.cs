@@ -8,6 +8,7 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] WeaponMovementController weaponMovementController;
     [SerializeField] PlayerController playerController;
     [SerializeField] GameObject weaponCollisionParticles;
+    [SerializeField] SoundController soundController;
     BoxCollider weaponCollider;
     float enemyDamage;
     float weaponDamage;
@@ -52,7 +53,7 @@ public class PlayerWeaponController : MonoBehaviour
             var collisionPoint = other.ClosestPoint(transform.position);
             weaponCollisionParticles.transform.position = collisionPoint;
             PlayWeaponCollisionParticle();
-
+            soundController.Play("WeaponsHit");
             if (other.gameObject.TryGetComponent(out IDamagable damagable))
             {
                 damagable.RecieveDamage(weaponDamage);

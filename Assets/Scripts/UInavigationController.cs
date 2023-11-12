@@ -18,10 +18,6 @@ public class UInavigationController : MonoBehaviour
     [SerializeField] TextMeshProUGUI endLevelText;
     [Header("Ссылка")]
     [SerializeField] AnimationController animationController;
-    void Start()
-    {
-        
-    }
 
     public void CanvasesSetup()
     {
@@ -57,6 +53,11 @@ public class UInavigationController : MonoBehaviour
     }
     //По кнопке
     public void ChangeMenuToSettings()
+    {
+        ShowSettingsCanvas(true);
+        animationController.ShowSettingsPanelPanel();
+    }
+    public void ChangePauseToSettings()
     {
         ShowSettingsCanvas(true);
         animationController.ShowSettingsPanelPanel();

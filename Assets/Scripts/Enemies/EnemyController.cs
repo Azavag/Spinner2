@@ -9,7 +9,7 @@ public enum EnemyType
    Boss
 }
 
-public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
+public class EnemyController : MonoBehaviour, IDamagable
 {
     [Header ("Ссылки моба")]
     [SerializeField] protected Transform playerTransform;
@@ -19,6 +19,7 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     protected Animator animator;
     [SerializeField] protected AnimationClip deathClip;
     [SerializeField] protected GameObject attackControllerZone;
+    SoundController soundController;
     EnemyAttackController attackController;
     [Header("Характеристики")]
     [SerializeField] EnemyType enemyType;
@@ -41,6 +42,7 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
         animator = GetComponent<Animator>();
         canvasController = GetComponentInChildren<EnemyCanvasController>();
         attackController = attackControllerZone.GetComponent<EnemyAttackController>();
+        soundController = FindObjectOfType<SoundController>();
 
         EventManager.PlayerDied += OnPlayerDied;
         EventManager.GameReseted += OnGameReseted;
@@ -49,7 +51,8 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     {        
         rb.isKinematic = true;
         agent.speed = startAgentSpeed;
-        isAlive = true;        
+        isAlive = true;
+        agent.enabled = false;
         NavmeshAgentState(false);
         attackControllerZone.SetActive(false);
     }  
@@ -57,11 +60,12 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     {
         if(underGround)
             CheckGround();
-        else animator.SetFloat("speed", agent.velocity.sqrMagnitude);
-       
+        else animator.SetFloat("speed", agent.velocity.sqrMagnitude);     
     }  
     private void FixedUpdate()
     {
+        if (!isAlive && !isDeathAnimationEnd)
+            return;
         //Движение к игроку по NavMesh на поверхности
         if (isFollowPlayer)
         {
@@ -71,10 +75,8 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
         //Движение к игроку под землёй
         if (underGround)
             RiseToGround();
-
         if (isDeathAnimationEnd)
-            MoveUnderground();
-           
+            MoveUnderground();         
     }
     public void SetMaxHealth(float maxHealth)
     {
@@ -87,6 +89,7 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
         if (StaticSettings.CanShowDamageNumber())
             canvasController.ShowDamageValueText(damageValue);
         AnimateDamage();
+        soundController.Play("EnemyTakeDamage");
         if (currentHealth <= 0 && isAlive)
         {            
             StartCoroutine(DeathProccess());
@@ -96,13 +99,11 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     }
     public virtual IEnumerator DeathProccess()
     {
-        DisableComponents();
-               
+        DisableComponents();               
         animator.SetTrigger("death");
         yield return new WaitForSeconds(deathClip.length);
         isDeathAnimationEnd = true;
         yield return null;
-
     }
     public void AnimateDamage()
     {
@@ -111,9 +112,8 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     protected void DisableComponents()
     {
         isAlive = false;
-        agent.speed = 0;
-        agent.enabled = false;
         NavmeshAgentState(false);
+        agent.enabled = false;
         GetComponent<Collider>().enabled = false;
         EventManager.InvokeEnemyTypeDied(enemyType);
         EventManager.InvokeEnemyDied();
@@ -129,6 +129,7 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
         if (transform.position.y >= 0)
         {
             UnderGround(false);
+            agent.enabled = true;
             NavmeshAgentState(true);
             animator.SetTrigger("onGround");
             if(enemyType == EnemyType.Regular)
@@ -158,11 +159,10 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     }
     public void NavmeshAgentState(bool state)
     {
-        //agent.enabled = state;
+        isFollowPlayer = state;
         if (state)
             agent.speed = startAgentSpeed;
         else agent.speed = 0;
-        isFollowPlayer = state;
     }
     //В анимации EnemyAttackAnimation
     public void AttackPlayer()
@@ -187,40 +187,5 @@ public class EnemyController : MonoBehaviour, IDamagable, IKnockbackable
     {
         EventManager.PlayerDied -= OnPlayerDied;
         EventManager.GameReseted -= OnGameReseted;
-    }
-  
-
-
-
-    void StartKnockback()
-    {
-        //isFollowPlayer = false;
-        //agent.speed = 0f;
-        ////rb.isKinematic = false;
-        //Vector3 knockbackDirection = (transform.position - playerTransform.position);
-        //knockbackDirection.y = 0;
-        //knockbackDirection.Normalize();
-        ////rb.AddForce(knockbackDirection * knockbackPower, ForceMode.Impulse);
-        //isBeingHit = true;
-    }
-
-    void EndKnockback()
-    {
-        ////rb.isKinematic = true;
-        //agent.speed = startAgentSpeed;
-        //isFollowPlayer = true;
-        //isBeingHit = false;
-    }  
-
-    public void RecieveKnockback(float knockbackValue)
-    {
-        //knockbackPower = knockbackValue;
-        //if (!isBeingHit)
-        //{
-        //    if (canKnockback)
-        //    {
-        //        StartKnockback();
-        //    }
-        //}
     }
 }

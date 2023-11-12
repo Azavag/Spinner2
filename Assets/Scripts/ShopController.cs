@@ -16,6 +16,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] int[] priceGrades;
     int movementSpeedUpgradePrice, damageUpgradePrice, rotationSpeedUpgradePrice;
     int movementUpgradePriceLevel, damageUpgradePriceLevel, rotationUpgradePriceLevel;
+    int maxUpgradeCount = 50;
     [Header("Тексты")]
     [SerializeField] TextMeshProUGUI speedPriceText;
     [SerializeField] TextMeshProUGUI rotationPriceText;
@@ -38,12 +39,14 @@ public class ShopController : MonoBehaviour
             FailedBuy();
             return;
         }
-        playerUpgrade.UpgradeMovementSpeed();
         moneyManager.UpdateMoneyCount(-movementSpeedUpgradePrice);
+        SuccessBuy();      
+        playerUpgrade.UpgradeMovementSpeed();
         movementUpgradePriceLevel++;
+        if (movementUpgradePriceLevel == maxUpgradeCount)
+            return;
         ChangePriceLevel(out movementSpeedUpgradePrice, movementUpgradePriceLevel);
         UpdatePriceText(speedPriceText, movementSpeedUpgradePrice);
-        SuccessBuy();      
     }
     public void TryBuyRotationSpeedUpgrade() 
     {
@@ -51,13 +54,16 @@ public class ShopController : MonoBehaviour
         {
             FailedBuy();
             return;
-        }    
-        playerUpgrade.UpgradeRotationSpeed();
+        }     
         moneyManager.UpdateMoneyCount(-rotationSpeedUpgradePrice);
+        SuccessBuy();
+        playerUpgrade.UpgradeRotationSpeed();
         rotationUpgradePriceLevel++;
+        if (rotationUpgradePriceLevel == maxUpgradeCount)
+            return;
         ChangePriceLevel(out rotationSpeedUpgradePrice, rotationUpgradePriceLevel);
         UpdatePriceText(rotationPriceText, rotationSpeedUpgradePrice);
-        SuccessBuy();        
+        
     }
     public void TryBuyEnemyDamageUpgrade() 
     {       
@@ -66,12 +72,15 @@ public class ShopController : MonoBehaviour
             FailedBuy();
             return;
         }
-        playerUpgrade.UpgradeDealingDamage();
+        
         moneyManager.UpdateMoneyCount(-damageUpgradePrice);
+        SuccessBuy();
+        playerUpgrade.UpgradeDealingDamage();
         damageUpgradePriceLevel++;
+        if (damageUpgradePriceLevel == maxUpgradeCount)
+            return;
         ChangePriceLevel(out damageUpgradePrice, damageUpgradePriceLevel);
         UpdatePriceText(damagePriceText, damageUpgradePrice);
-        SuccessBuy();     
     }
 
     void ChangePriceLevel(out int price,int level)
@@ -89,6 +98,6 @@ public class ShopController : MonoBehaviour
     }
     void FailedBuy()
     {
-        soundController.Play("FailureBuy");
+        soundController.Play("FailBuy");
     }
 }

@@ -8,18 +8,20 @@ using UnityEngine.UI;
 public class SoundController : MonoBehaviour
 {
     [Header("Volume control")]
-    [SerializeField] Slider sfxSlider;
-    [SerializeField] Slider musicSlider;
     [SerializeField] public AudioMixer mixer;
     [SerializeField] AudioMixerGroup musicMixerGroup, effectsMixerGroup, masterMixerGroup;
     float sfxVolume, musicVolume;
     bool isMasterVolumeEnabled;
     [Header("All sounds")]  
     [SerializeField] Sound[] sounds;
-    AudioSource m_AudioSource;
+    [Header("UI")]
+    [SerializeField] Slider sfxSlider;
+    [SerializeField] Slider musicSlider;
+    [SerializeField] Image pauseSoundImage;
+
+
     private void Awake()
     {
-        transform.SetParent(null);
         foreach (Sound s in sounds)
         {                 
             s.audioSource = gameObject.AddComponent<AudioSource>();
@@ -38,12 +40,12 @@ public class SoundController : MonoBehaviour
                     break;
             }
         }
-        Play("Background");
+        isMasterVolumeEnabled = true;
     }
 
     void Start()
     {
-        m_AudioSource = GetComponent<AudioSource>();
+
         //effectsSlider.value = Progress.Instance.playerInfo.effectsVolume;
         //musicSlider.value = Progress.Instance.playerInfo.musicVolume;
     }
@@ -52,6 +54,11 @@ public class SoundController : MonoBehaviour
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         s.audioSource.Play();
+    }
+    public void StopPlay(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        s.audioSource.Stop();
     }
 
     public Sound GetSound(string name)
@@ -82,9 +89,17 @@ public class SoundController : MonoBehaviour
     {
         isMasterVolumeEnabled = !isMasterVolumeEnabled;
         if (isMasterVolumeEnabled)
-            mixer.SetFloat("MasterVolume", 0);
-        else 
-            mixer.SetFloat("MasterVolume", -80);
+        {
+            mixer.SetFloat("MusicVolume", 0);
+            mixer.SetFloat("SFXVolume", 0);
+        }
+        else
+        {
+            mixer.SetFloat("MusicVolume", -80);
+            mixer.SetFloat("SFXVolume", -80);
+            sfxSlider.value = 0;
+            musicSlider.value = 0;
+        }
 
     }
     //По кнопке Закрыть

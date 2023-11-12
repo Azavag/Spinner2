@@ -51,7 +51,6 @@ public class EnemySpawnerController : MonoBehaviour
     }
     void SetEnemiesStats()
     {
-
         enemyData.CheckLevelForHealth(levelNumber);
         enemyPrefab.GetComponent<EnemyController>().SetMaxHealth(enemyData.GetEnemyHealth());
         miniBossPrefab.GetComponent<EnemyController>().SetMaxHealth(enemyData.GetMinibossHealth());
@@ -63,24 +62,20 @@ public class EnemySpawnerController : MonoBehaviour
 
         enemyData.CheckLevelForDurability(levelNumber);
         miniBossPrefab.GetComponent<BossController>().SetWeaponDurablity(enemyData.GetMinibossWeaponDurability());
-        bossPrefab.GetComponent<BossController>().SetWeaponDurablity(enemyData.GetBossWeaponDurability());
-        
-
+        bossPrefab.GetComponent<BossController>().SetWeaponDurablity(enemyData.GetBossWeaponDurability());        
     }
 
     IEnumerator StartLevelCoroutine()
     {
-        waveSlider.value = 0;
-       
-        LevelSetup(levelNumber);
-        
+        waveSlider.value = 0;      
+        LevelSetup(levelNumber);      
         yield return new WaitForSeconds(timeBeforeLevel);
         StartCoroutine(spawnRoutine);
         yield return null;
     }
     void LevelSetup(int levelNumber)
     {
-        enemiesOnLevel = spawnData.GetLevelEnemiesCount()[levelNumber];        
+        enemiesOnLevel = spawnData.GetLevelEnemiesCount(levelNumber);
         enemies.Clear();
         for (int i = 0;i < enemiesOnLevel; i++)
         {
@@ -124,7 +119,7 @@ public class EnemySpawnerController : MonoBehaviour
     }
 
     void SpawnMiniboss()
-    {      
+    {
         currentSpawnPoint.SpawnEnemy(miniBossPrefab);
     }
     void SpawnBoss()

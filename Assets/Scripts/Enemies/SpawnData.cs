@@ -10,21 +10,14 @@ public class SpawnData : MonoBehaviour
     [SerializeField] int maxLevelsCount;                    //Максимальный уровень
     [SerializeField] int maxEnemiesCountOnLevel;            //Максимальное количество мобов на уровне(На 300 уровне)
     [SerializeField] int minEnemiesCountOnLevel;            //Минимальное количество мобов на уровне (на первом уровне)
-    int averageEnemiesOnLevel;                              //Среднее Количество мобов на уровне                                                            //Реальное количество мобов на уровне
     [Header("Настройки волн")]
     [SerializeField] AnimationCurve timesBetweenSpawnsCurve;
-    Dictionary<int, int> EnemiesOnLevelDict = new Dictionary<int, int>();
     [Header("Спавн боссов")]
     [SerializeField] int bossSpawnPercent;
    
     void Start()
     {
-        SetupLevelCurve();
-        for (int i = 0; i < maxLevelsCount; i++)
-        {                                                  
-            averageEnemiesOnLevel = (int)levelsEnemiesCountCurve.Evaluate(i);
-            EnemiesOnLevelDict.Add(i, averageEnemiesOnLevel);
-        }             
+        SetupLevelCurve();           
     }
     void SetupLevelCurve()
     {
@@ -57,9 +50,9 @@ public class SpawnData : MonoBehaviour
             default: return 0;
         }
     }
-    public Dictionary<int, int> GetLevelEnemiesCount()
+    public int GetLevelEnemiesCount(int levelNumber)
     {
-        return EnemiesOnLevelDict;
+        return (int)levelsEnemiesCountCurve.Evaluate(levelNumber);
     }
 
     public AnimationCurve GetTimingSpawnCurve()

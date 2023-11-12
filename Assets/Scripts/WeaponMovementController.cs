@@ -17,7 +17,7 @@ public class WeaponMovementController : MonoBehaviour
     [SerializeField] protected Direction rotateDirection;
     protected Vector3 direction;
     [SerializeField] protected float rotationSpeed;
-    [SerializeField] float speed;
+    float speed;
     private void Awake()
     {
         transform.SetParent(null);
@@ -30,19 +30,17 @@ public class WeaponMovementController : MonoBehaviour
     }
     void FixedUpdate()
     {       
-        weaponModelTransform.RotateAround(rotationPoint.position, direction, speed);
+        weaponModelTransform.RotateAround(rotationPoint.position, 
+            direction, 
+            rotationSpeed * Time.fixedDeltaTime);
     }
     private void LateUpdate()
     {
         transform.position = ownerTransform.position;
-
-        //if (Input.GetMouseButtonDown(1))
-        //    SwapWeaponDirection();
     }
     public void SetRotationSpeed(float rotateSpeed)
     {
-        rotationSpeed = rotateSpeed;
-        speed = rotationSpeed * Time.fixedDeltaTime;
+        this.rotationSpeed = rotateSpeed;
     }
     public void SwapWeaponDirection()
     {

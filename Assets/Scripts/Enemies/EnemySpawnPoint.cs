@@ -36,17 +36,14 @@ public class EnemySpawnPoint : MonoBehaviour
             enemy.UnderGround(true);
             enemy.SetTargetTransform(playerTransform);
         }
-
     }
     Vector3 GenerateRandomPointInSphere(Vector3 center, float radius)
     {
         float randomAngle = Random.Range(0.0f, Mathf.PI * 2);
         float randomRadius = Random.Range(0, radius);
-
         float x = center.x + randomRadius * Mathf.Cos(randomAngle);
         float z = center.z + randomRadius * Mathf.Sin(randomAngle);
-        float y = center.y - 2.3f;
-
+        float y = center.y - 2f;
         return new Vector3(x, y, z);
     }
 

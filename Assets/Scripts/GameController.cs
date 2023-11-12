@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
     [SerializeField] SoundController soundController;
     
     GameState currentState;
-    int currentLevel;
+    [SerializeField] int currentLevel;
     bool roundResult;
     void Start()
     {
@@ -44,11 +44,13 @@ public class GameController : MonoBehaviour
             navigationController.ChangeStartToIngame();          
             playerMovement.SwitchInput(true);            
             spawner.StartLevel();
+            soundController.Play("BattleBackground");
         }
         
     } 
     public void EndLevel(bool success)
     {
+        soundController.StopPlay("BattleBackground");
         roundResult = success;
         if (currentState == GameState.GameProccess)
         {
@@ -71,8 +73,8 @@ public class GameController : MonoBehaviour
         else soundController.Play("LoseRound");
         navigationController.ChangeIngameToEnd();
         yield return new WaitForSeconds(0.6f);          //Задержка перед полным открытием панели          
-        EventManager.InvokeGameReseted();
         playerController.ResetPlayer();       
+        EventManager.InvokeGameReseted();
     }
     //По кнопке
     public void GoToMenu()
@@ -82,8 +84,7 @@ public class GameController : MonoBehaviour
             ChangeGameState(GameState.PrepareGame);
             navigationController.ChangeEndToMenu();
             navigationController.UpdateLevelNumberText(currentLevel);
-        }
-      
+        }      
     }
     //По кнопке
     public void SetPause()

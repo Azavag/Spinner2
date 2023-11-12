@@ -42,12 +42,12 @@ public class AnimationController : MonoBehaviour
     {
         SettingsPanel.localScale = Vector3.zero;
         SettingsPanel.DOScale(1f, settingsInScaleAnimTime).
-            SetEase(settingAnimEase).Play().SetAutoKill();        
+            SetEase(settingAnimEase).Play().SetAutoKill().SetUpdate(true);        
     }
     public void HideSettingsPanel(TweenCallback tweenCallback)
     {
         SettingsPanel.DOScale(0, settingsOutScaleAnimTime).
-            SetEase(settingAnimEase).Play().OnComplete(tweenCallback).SetAutoKill();
+            SetEase(settingAnimEase).Play().OnComplete(tweenCallback).SetAutoKill().SetUpdate(true);
     }
 
     public void ShowEndLevelPanel()  

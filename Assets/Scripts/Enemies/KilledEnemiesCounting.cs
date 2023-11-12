@@ -9,6 +9,7 @@ public class KilledEnemiesCounting : MonoBehaviour
     int levelMoneyCount;
     [SerializeField] int moneyForKill = 2;
     [SerializeField] int bossMoneyMultiplier = 5, minibossMoneyMultiplier = 3;
+    [SerializeField] MoneyManager moneyManager;
     private void Awake()
     {
         EventManager.EnemyTypeDied += OnEnemyTypeDied;
@@ -26,20 +27,25 @@ public class KilledEnemiesCounting : MonoBehaviour
     private void OnEnemyTypeDied(EnemyType enemyType)
     {
         enemyKilledList[enemyType]++;
+        int tempMoney = 0;
         switch (enemyType)
         {
             case EnemyType.Regular:
-                levelMoneyCount += moneyForKill;
+                tempMoney = moneyForKill;
                 break;
             case EnemyType.Miniboss:
-                levelMoneyCount += moneyForKill * minibossMoneyMultiplier;
+                //levelMoneyCount += moneyForKill * minibossMoneyMultiplier;
+                tempMoney = moneyForKill * minibossMoneyMultiplier;
                 break;
             case EnemyType.Boss:
-                levelMoneyCount += moneyForKill * bossMoneyMultiplier;
+                //levelMoneyCount += moneyForKill * bossMoneyMultiplier;
+                tempMoney = moneyForKill * bossMoneyMultiplier;
                 break;
             default:
                 break;
         }
+        levelMoneyCount += tempMoney;
+        moneyManager.UpdateMoneyCount(tempMoney);
     }
     public int GetLevelMoneyCount()
     {

@@ -66,8 +66,7 @@ public class BossController : EnemyController, IDamagable
         {
             MoveUnderground();
             return;
-        }
-        
+        }    
         //Подъём
         if (underGround)
             RiseToGround();
@@ -77,12 +76,10 @@ public class BossController : EnemyController, IDamagable
             SetTarget(playerTransform.position);
             agent.SetDestination(agentTarget);
         }
-
         if (canRunAway && isRunAway)
         {
             RunAwayFromPlayer();
-        }
-       
+        }    
     }
     public void ResetWeaponState(bool resetState)
     {     

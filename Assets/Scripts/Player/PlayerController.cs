@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [Header("Ссылки")]
     [SerializeField] Image healthSlider;
     [SerializeField] GameController gameController;
+    [SerializeField] SoundController soundController;
     Animator animator;
     Rigidbody rb;
     PlayerMovement playerMovement;
@@ -58,14 +59,12 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         currentHealth -= damageValue;
         healthSlider.fillAmount = currentHealth / maxHealth;
-
+        soundController.Play("PlayerTakeDamage");
         if (currentHealth <= 0)
         {
             StartCoroutine(DeathProccess());
             return;
         }
-        //rb.AddForce(10f * Vector3.back, ForceMode.Impulse);
-
         ChangeImmortalityState();
     }
     IEnumerator DeathProccess()
@@ -78,8 +77,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         yield return new WaitForSeconds(3f);
         gameController.EndLevel(false);
         yield return null;
-
-        //Вывод финального окна(Через EVENT??)
     }
     //Восстановление персонажа
     public void ResetPlayer()

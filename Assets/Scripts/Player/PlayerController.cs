@@ -7,20 +7,20 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     [Header("Ссылки")]
-    [SerializeField] Image healthSlider;
     [SerializeField] GameController gameController;
     [SerializeField] SoundController soundController;
     [SerializeField] PlayerCanvasController canvasController;
     Animator animator;
     PlayerMovement playerMovement;
-    [SerializeField] WeaponMovementController weaponMovementController;
+    [SerializeField] public WeaponMovementController weaponMovementController;
     [SerializeField] PlayerWeaponController weaponController;
     [SerializeField] Vector3 startCoordinates;
+    [SerializeField] HealthSlider healthBar;
     [Header("Характеристики")]
     [SerializeField] float enemyDamage = 10;                     //Старт - 10
     [SerializeField] float moveSpeed = 70;                       //Старт - 70
     [SerializeField] float rotaionSpeed = 200;                    //Старт - 200
-    [SerializeField] float maxHealth;       
+    [SerializeField] float maxHealth = 3;       
     [SerializeField] float currentHealth;
     float weaponDamage = 1;
     [SerializeField] float immortalityInterval = 1.5f;             //Время неузвимости
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         weaponController.SetEnemyDamage(enemyDamage);
         weaponController.SetWeaponDamage(weaponDamage);
         playerMovement.enabled = false;
+        healthBar.SetSliderMaxValue(maxHealth);
         ResetHealth();
     }
     private void Update()
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         currentHealth -= damageValue;
         canvasController.ShowDamageValueText(damageValue);
-        healthSlider.fillAmount = currentHealth / maxHealth;
+        healthBar.ChangeCurrentHealthValue(currentHealth);
         soundController.Play("PlayerTakeDamage");
         if (currentHealth <= 0)
         {
@@ -72,13 +73,13 @@ public class PlayerController : MonoBehaviour, IDamagable
         ChangeImmortalityState();
     }
     IEnumerator DeathProccess()
-    {
-        //playerMovement.SwitchInput(false);
+    {       
         playerMovement.enabled = false;
         animator.SetFloat("speed", 0);
         animator.SetBool("isDeath", true);
         GetComponent<Collider>().enabled = false;
         EventManager.InvokePlayerDied();
+        healthBar.gameObject.SetActive(false);
         weaponController.ShowWeaponModel(false);
         yield return new WaitForSeconds(2.5f);
         gameController.EndLevel(false);
@@ -97,8 +98,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
     public void ResetHealth()
     {
+        healthBar.gameObject.SetActive(true);
         currentHealth = maxHealth;
-        healthSlider.fillAmount = 1;
+        healthBar.ResetSlider();
     }
     void ChangeImmortalityState()
     {

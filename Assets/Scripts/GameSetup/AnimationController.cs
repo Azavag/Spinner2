@@ -60,13 +60,12 @@ public class AnimationController : MonoBehaviour
            SetEase(Ease.OutBounce).OnComplete(ShowTextsInEndPanel).SetAutoKill();
         textShowSequence = DOTween.Sequence().SetAutoKill();
 
-        acceptButton.transform.localScale = Vector3.zero;
         foreach (Transform textObject in textObjects)
         {
             textObject.transform.localScale = Vector3.zero;          
             textShowSequence.Append(textObject.DOScale(1, textShowAnimTime).SetEase(Ease.OutQuad));
         }
-        textShowSequence.AppendInterval(2 * textShowAnimTime);
+        acceptButton.transform.localScale = Vector3.zero;
         textShowSequence.OnComplete(Callback);
         for (int tempCounter = 0; tempCounter < killedTypesTexts.Length; tempCounter++)
         {
@@ -79,8 +78,15 @@ public class AnimationController : MonoBehaviour
     void Callback()
     {
         advManager.ShowAdv();
+        StartCoroutine(ShowAcceptButton());
+    }
+    IEnumerator ShowAcceptButton()
+    {
+        yield return new WaitForSeconds(0.75f);       
         acceptButton.DOScale(1, textShowAnimTime).SetEase(Ease.OutQuad).SetAutoKill().Play();
     }
+
+ 
     public void HideEndLevelPanel(TweenCallback tweenCallback)
     {
         EndLevelPanel.DOScale(0, outScaleAnimTime).

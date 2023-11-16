@@ -72,8 +72,7 @@ public class GameController : MonoBehaviour
     }
 
     IEnumerator EndingLevelCouroutine()
-    {
-       
+    {      
         yield return new WaitForSeconds(1f);
         if (roundResult)
             soundController.Play("WinRound");
@@ -100,8 +99,8 @@ public class GameController : MonoBehaviour
         {
             ChangeGameState(GameState.PauseGame);
             navigationController.ShowPauseCanvas(true);
-        }
-        Time.timeScale = 0;
+            Time.timeScale = 0;
+        }     
     }
     public void StopPause()
     {

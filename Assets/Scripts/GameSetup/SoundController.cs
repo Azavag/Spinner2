@@ -16,6 +16,8 @@ public class SoundController : MonoBehaviour
     [Header("UI")]
     [SerializeField] Slider sfxSlider;
     [SerializeField] Slider musicSlider;
+    [Header("References")]
+    [SerializeField] GameController gameController;
 
     private void Awake()
     {
@@ -83,7 +85,7 @@ public class SoundController : MonoBehaviour
         Progress.Instance.playerInfo.musicVolume = musicVolume;
     }
 
-    //По кнопке Закрыть
+    //По кнопке Закрыть настройки
     public void SaveVolumeSetting()
     {
         YandexSDK.Save();
@@ -93,17 +95,13 @@ public class SoundController : MonoBehaviour
     {       
         Silence(!focus);
         if (!focus)
-            Time.timeScale = 0f;
-        else Time.timeScale = 1f;
-
-        
+            gameController.SetPause();
     }
     private void OnApplicationPause(bool pause)
     {
         Silence(pause);
         if (pause)
-            Time.timeScale = 0f;
-        else Time.timeScale = 1f;
+            gameController.SetPause();
     }
     void Silence(bool silence)
     {

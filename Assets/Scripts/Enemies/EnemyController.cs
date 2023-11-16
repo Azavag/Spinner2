@@ -106,7 +106,6 @@ public class EnemyController : MonoBehaviour, IDamagable
         animator.SetTrigger("death");
         yield return new WaitForSeconds(deathClip.length);
         isDeathAnimationEnd = true;
-        yield return null;
     }
     public void AnimateDamage()
     {

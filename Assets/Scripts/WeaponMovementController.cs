@@ -15,7 +15,7 @@ public class WeaponMovementController : MonoBehaviour
     [SerializeField] protected Transform weaponModelTransform;
     [SerializeField] protected Transform rotationPoint;
     [SerializeField] protected Direction rotateDirection;
-    protected Vector3 direction;
+    protected Vector3 directionVector;
     [SerializeField] protected float rotationSpeed;
 
     private void Awake()
@@ -24,29 +24,31 @@ public class WeaponMovementController : MonoBehaviour
     }
     private void Start()
     {
-        direction = weaponModelTransform.up;
-        if (rotateDirection == Direction.Ñounterclockwise)
-            direction = -direction;
+
     }
 
     public void SetAntiDirection(Direction playerDirection)
-    {       
+    {
         if (playerDirection == Direction.Ñlockwise)
         {
             rotateDirection = Direction.Ñounterclockwise;
-            direction = -direction;
             return;
         }
         else
         {
             rotateDirection = Direction.Ñlockwise;
-        }
-
+        }       
     }
     void FixedUpdate()
-    {       
+    {
+        if (rotateDirection == Direction.Ñlockwise)
+        {
+            directionVector = Vector3.up;
+        }
+        else directionVector = -Vector3.up;
+
         weaponModelTransform.RotateAround(rotationPoint.position, 
-            direction, 
+            directionVector, 
             rotationSpeed * Time.fixedDeltaTime);
     }
     private void LateUpdate()
@@ -59,7 +61,10 @@ public class WeaponMovementController : MonoBehaviour
     }
     public void SwapWeaponDirection()
     {
-        direction = -direction;
+        if (rotateDirection == Direction.Ñlockwise)
+            rotateDirection = Direction.Ñounterclockwise;
+        else rotateDirection = Direction.Ñlockwise;
+      
         weaponModelTransform.transform.Rotate(180, weaponModelTransform.transform.rotation.y, 0);
     }
     public Direction GetRotationDirection()

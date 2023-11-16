@@ -36,7 +36,7 @@ public class PlayerCanvasController : MonoBehaviour
         tempTextObject.GetComponent<TextMeshProUGUI>().text = ((int)damageValue).ToString();
         Destroy(tempTextObject.gameObject, 1.1f * damageValueTextTime);
 
-        tempTextObject.DOLocalMoveY(45, damageValueTextTime).
+        tempTextObject.DOLocalMoveY(150, damageValueTextTime).
           SetEase(Ease.OutQuart).Play().SetAutoKill();
         Sequence fadeTextSequence = DOTween.Sequence();
         fadeTextSequence.Append(tempTextObject.GetComponent<TextMeshProUGUI>().DOFade(1, 0.5f * damageValueTextTime).

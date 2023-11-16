@@ -93,9 +93,8 @@ public class BossController : EnemyController, IDamagable
 
     public void SetAntiPlayerDirection()
     {
-        weaponMovementController.SetAntiDirection(playerTransform.gameObject.
-            GetComponent<WeaponMovementController>().
-            GetRotationDirection());
+        weaponMovementController.SetAntiDirection(playerTransform.GetComponent<PlayerController>()
+            .weaponMovementController.GetRotationDirection());
     }
     IEnumerator StunProccess()
     {

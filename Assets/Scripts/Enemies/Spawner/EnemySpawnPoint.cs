@@ -37,8 +37,7 @@ public class EnemySpawnPoint : MonoBehaviour
         }
         if (tempEnemy.TryGetComponent(out BossController boss))
         {
-            Debug.Log("SetRotation");
-            boss.SetAntiPlayerDirection();
+            boss.SetAntiPlayerDirection();          
         }
     }
     Vector3 GenerateRandomPointInSphere(Vector3 center, float radius)

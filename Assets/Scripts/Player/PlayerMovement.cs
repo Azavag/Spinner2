@@ -80,6 +80,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        rb.isKinematic = true;
+        animator.SetFloat("speed", 0);
     }
 }

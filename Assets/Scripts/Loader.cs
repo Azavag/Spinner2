@@ -8,6 +8,14 @@ public class Loader : MonoBehaviour
     [SerializeField] bool inEditor;
     [SerializeField] Progress progress;
     [SerializeField] YandexSDK yandex;
+
+    private void Awake()
+    {
+        sdk.gameObject.SetActive(false);
+        player.gameObject.SetActive(false);
+        canvases.SetActive(false);
+        controllers.SetActive(false);
+    }
     private void Start()
     {
 #if UNITY_EDITOR
@@ -15,8 +23,6 @@ public class Loader : MonoBehaviour
         progress.gameObject.SetActive(true);
 #endif
         StartCoroutine(Loading());
-
-
     }
     IEnumerator Loading()
     {

@@ -19,15 +19,17 @@ public class GameController : MonoBehaviour
     [SerializeField] AnimationController animationController;
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] PlayerController playerController;
-    [SerializeField] UInavigationController navigationController;
+    [SerializeField] InterfaceNavigationController navigationController;
     [SerializeField] SoundController soundController;
     
     GameState currentState;
-    [SerializeField] int currentLevel;
+    int currentLevel = 0;
     bool roundResult;
     void Start()
     {
-        SetupGame();        
+        currentLevel = Progress.Instance.playerInfo.levelNumber;
+        
+        SetupGame();
     }
 
     void SetupGame()
@@ -42,7 +44,8 @@ public class GameController : MonoBehaviour
         {
             ChangeGameState(GameState.GameProccess);
             navigationController.ChangeStartToIngame();          
-            playerMovement.SwitchInput(true);            
+            //playerMovement.SwitchInput(true);
+            playerMovement.enabled = true;
             spawner.StartLevel();
             soundController.Play("BattleBackground");
         }
@@ -50,6 +53,7 @@ public class GameController : MonoBehaviour
     } 
     public void EndLevel(bool success)
     {
+        playerMovement.enabled = false;
         soundController.StopPlay("BattleBackground");
         roundResult = success;
         if (currentState == GameState.GameProccess)
@@ -61,20 +65,23 @@ public class GameController : MonoBehaviour
         if (roundResult)
         {
             currentLevel++;
+            Progress.Instance.playerInfo.levelNumber = currentLevel;
+            YandexSDK.Save();
+            YandexSDK.SetToLeaderboard();
         }
     }
 
     IEnumerator EndingLevelCouroutine()
     {
-        playerMovement.SwitchInput(false);
-        yield return new WaitForSeconds(1.3f);
+       
+        yield return new WaitForSeconds(1f);
         if (roundResult)
             soundController.Play("WinRound");
         else soundController.Play("LoseRound");
         navigationController.ChangeIngameToEnd();
         yield return new WaitForSeconds(0.6f);          //Задержка перед полным открытием панели          
-        playerController.ResetPlayer();       
         EventManager.InvokeGameReseted();
+        playerController.ResetPlayer();       
     }
     //По кнопке
     public void GoToMenu()
@@ -108,8 +115,12 @@ public class GameController : MonoBehaviour
     public void QuitGame()
     {
         StopPause();
-        navigationController.ShowIngameCanvas(false);
         EventManager.InvokePlayerDied();
+ 
+        playerController.isImmortal = true;
+        playerController.GetComponent<Animator>().SetFloat("speed", 0);
+        //playerMovement.SwitchInput(false);
+        navigationController.ShowIngameCanvas(false);
         EndLevel(false);
     }
     void ChangeGameState(GameState state)

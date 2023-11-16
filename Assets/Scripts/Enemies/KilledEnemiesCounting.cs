@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class KilledEnemiesCounting : MonoBehaviour
 {
+    [SerializeField] MoneyManager moneyManager;
     Dictionary<EnemyType, int> enemyKilledList = new Dictionary<EnemyType, int>();
     int levelMoneyCount;
     [SerializeField] int moneyForKill = 2;
     [SerializeField] int bossMoneyMultiplier = 5, minibossMoneyMultiplier = 3;
-    [SerializeField] MoneyManager moneyManager;
     private void Awake()
     {
         EventManager.EnemyTypeDied += OnEnemyTypeDied;

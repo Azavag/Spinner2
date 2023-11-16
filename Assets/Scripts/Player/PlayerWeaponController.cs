@@ -9,18 +9,12 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] GameObject weaponCollisionParticles;
     [SerializeField] SoundController soundController;
-    BoxCollider weaponCollider;
     float enemyDamage;
     float weaponDamage;
-
     float untouchTime = 0.3f;
     float untouchTimer;
     bool isWeaponUntouchable;
 
-    private void Awake()
-    {
-        weaponCollider = GetComponent<BoxCollider>();       
-    }
     void Start()
     {
         isWeaponUntouchable = false;
@@ -81,7 +75,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void ShowWeaponModel(bool state)
     {
-        weaponCollider.enabled = state;
         gameObject.SetActive(state);
     }
 

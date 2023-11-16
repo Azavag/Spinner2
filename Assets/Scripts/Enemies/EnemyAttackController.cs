@@ -23,11 +23,6 @@ public class EnemyAttackController : MonoBehaviour
         animator = GetComponentInParent<Animator>();
         enemyController = GetComponentInParent<EnemyController>();
     }
-    void Start()
-    {
-
-    }
-
     void StartAttackAnimation()
     {
         enemyController.NavmeshAgentState(false);

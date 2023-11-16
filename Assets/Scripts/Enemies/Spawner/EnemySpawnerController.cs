@@ -37,11 +37,6 @@ public class EnemySpawnerController : MonoBehaviour
         EventManager.PlayerDied += OnPlayerDied;
     }
 
-    void Start()
-    {
-        
-    }
-
     public void StartLevel()
     {
         levelNumber = gameController.GetCurrentLevelNumber();

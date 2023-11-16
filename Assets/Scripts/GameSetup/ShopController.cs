@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class ShopController : MonoBehaviour
     [Header("Цены")]
     [SerializeField] int[] priceGrades;
     int movementSpeedUpgradePrice, damageUpgradePrice, rotationSpeedUpgradePrice;
-    int movementUpgradePriceLevel, damageUpgradePriceLevel, rotationUpgradePriceLevel;
+    int movementUpgradePriceLevel = 0, damageUpgradePriceLevel = 0, rotationUpgradePriceLevel = 0;
     int maxUpgradeCount = 50;
     [Header("Тексты")]
     [SerializeField] TextMeshProUGUI speedPriceText;
@@ -23,12 +24,21 @@ public class ShopController : MonoBehaviour
     [SerializeField] TextMeshProUGUI damagePriceText;
     void Start()
     {
-        ChangePriceLevel(out movementSpeedUpgradePrice, movementUpgradePriceLevel);
-        ChangePriceLevel(out rotationSpeedUpgradePrice, rotationUpgradePriceLevel);
-        ChangePriceLevel(out damageUpgradePrice, damageUpgradePriceLevel);
+        movementUpgradePriceLevel = Progress.Instance.playerInfo.speedUpgradeLevel;
+        rotationUpgradePriceLevel = Progress.Instance.playerInfo.rotationUpgradeLevel;
+        damageUpgradePriceLevel = Progress.Instance.playerInfo.damageUpgradeLevel;
+        ChangePriceLevel(out movementSpeedUpgradePrice, movementUpgradePriceLevel);      
+        ChangePriceLevel(out rotationSpeedUpgradePrice, rotationUpgradePriceLevel);      
+        ChangePriceLevel(out damageUpgradePrice, damageUpgradePriceLevel);       
         UpdatePriceText(speedPriceText, movementSpeedUpgradePrice);
         UpdatePriceText(rotationPriceText, rotationSpeedUpgradePrice);
         UpdatePriceText(damagePriceText, damageUpgradePrice);
+        if (movementSpeedUpgradePrice == 0)
+            playerUpgrade.BlockSpeedUpgradeButton();
+        if (rotationSpeedUpgradePrice == 0)
+            playerUpgrade.BlockRotationUpgradeButton();
+        if (damageUpgradePrice == 0)
+            playerUpgrade.BlockDamageUpgradeButton();
     }
 
     //По кнопкам
@@ -43,10 +53,13 @@ public class ShopController : MonoBehaviour
         SuccessBuy();      
         playerUpgrade.UpgradeMovementSpeed();
         movementUpgradePriceLevel++;
+        Progress.Instance.playerInfo.speedUpgradeLevel = movementUpgradePriceLevel;
+        YandexSDK.Save();
         if (movementUpgradePriceLevel == maxUpgradeCount)
             return;
         ChangePriceLevel(out movementSpeedUpgradePrice, movementUpgradePriceLevel);
         UpdatePriceText(speedPriceText, movementSpeedUpgradePrice);
+        YandexSDK.Save();
     }
     public void TryBuyRotationSpeedUpgrade() 
     {
@@ -59,11 +72,13 @@ public class ShopController : MonoBehaviour
         SuccessBuy();
         playerUpgrade.UpgradeRotationSpeed();
         rotationUpgradePriceLevel++;
+        Progress.Instance.playerInfo.rotationUpgradeLevel = rotationUpgradePriceLevel;
+        YandexSDK.Save();
         if (rotationUpgradePriceLevel == maxUpgradeCount)
             return;
         ChangePriceLevel(out rotationSpeedUpgradePrice, rotationUpgradePriceLevel);
         UpdatePriceText(rotationPriceText, rotationSpeedUpgradePrice);
-        
+        YandexSDK.Save();
     }
     public void TryBuyEnemyDamageUpgrade() 
     {       
@@ -77,18 +92,28 @@ public class ShopController : MonoBehaviour
         SuccessBuy();
         playerUpgrade.UpgradeDealingDamage();
         damageUpgradePriceLevel++;
+        Progress.Instance.playerInfo.damageUpgradeLevel = damageUpgradePriceLevel;
+        YandexSDK.Save();
         if (damageUpgradePriceLevel == maxUpgradeCount)
             return;
         ChangePriceLevel(out damageUpgradePrice, damageUpgradePriceLevel);
         UpdatePriceText(damagePriceText, damageUpgradePrice);
+       
     }
 
-    void ChangePriceLevel(out int price,int level)
+    void ChangePriceLevel(out int price,int upgLevel)
     {
-        price = priceGrades[level];
+        if (upgLevel < priceGrades.Length)
+        {
+            price = priceGrades[upgLevel];
+        }
+        else
+        {
+            price = 0;           
+        }
     }
-  
-    void UpdatePriceText(TextMeshProUGUI priceText, int price)
+
+        void UpdatePriceText(TextMeshProUGUI priceText, int price)
     {
         priceText.text = price.ToString();
     }

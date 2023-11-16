@@ -50,7 +50,6 @@ MonoBehaviour:
   rotationPoint: {fileID: 1449635373766282384}
   rotateDirection: 1
   rotationSpeed: 170
-  speed: 3.3999999
 --- !u!1 &3351648799546996540
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,10 +511,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &8552269416139207637
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -771,6 +770,7 @@ GameObject:
   - component: {fileID: 6041740746817211777}
   - component: {fileID: 8681654320007485160}
   - component: {fileID: 6421672374852002983}
+  - component: {fileID: 5392263974635292975}
   m_Layer: 8
   m_Name: ImmotralityText
   m_TagString: Untagged
@@ -894,6 +894,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5392263974635292975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7721861177245274654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b2f8979eaedb042a2964e2789b88d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ru: "\u041D\u0435\u0443\u044F\u0437\u0432\u0438\u043C"
+  _en: Invulnerable
 --- !u!1 &9066474293606723665
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,6 +919,7 @@ GameObject:
   - component: {fileID: 6376557731688143308}
   - component: {fileID: 2198769570906145791}
   - component: {fileID: 6391044701521505064}
+  - component: {fileID: 1654497705083461317}
   m_Layer: 8
   m_Name: UnweaponText
   m_TagString: Untagged
@@ -1028,6 +1043,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1654497705083461317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9066474293606723665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b2f8979eaedb042a2964e2789b88d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ru: "\u041E\u0431\u0435\u0437\u043E\u0440\u0443\u0436\u0435\u043D"
+  _en: Disarmed
 --- !u!1001 &6445793263223761234
 PrefabInstance:
   m_ObjectHideFlags: 0

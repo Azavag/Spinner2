@@ -173,7 +173,6 @@ MonoBehaviour:
   rotationPoint: {fileID: 7090753697906556310}
   rotateDirection: 1
   rotationSpeed: 150
-  speed: 0
 --- !u!1 &676047460732274699
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,10 +345,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!95 &5784987201440033753
 Animator:
   serializedVersion: 5
@@ -912,7 +911,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
@@ -1252,6 +1251,7 @@ GameObject:
   - component: {fileID: 7657670959323280871}
   - component: {fileID: 2313443091018093766}
   - component: {fileID: 3939951729421691078}
+  - component: {fileID: 8852545302391158910}
   m_Layer: 8
   m_Name: ImmortalityText
   m_TagString: Untagged
@@ -1375,6 +1375,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8852545302391158910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406102550855838850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b2f8979eaedb042a2964e2789b88d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ru: "\u041D\u0435\u0443\u044F\u0437\u0432\u0438\u043C"
+  _en: Invulnerable
 --- !u!1 &6358922343001542859
 GameObject:
   m_ObjectHideFlags: 0
@@ -1386,6 +1400,7 @@ GameObject:
   - component: {fileID: 5348054946676642234}
   - component: {fileID: 2595148119364943284}
   - component: {fileID: 588523891584592034}
+  - component: {fileID: 8552250679099238513}
   m_Layer: 8
   m_Name: UnweaponText
   m_TagString: Untagged
@@ -1509,6 +1524,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8552250679099238513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358922343001542859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b2f8979eaedb042a2964e2789b88d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ru: "\u041E\u0431\u0435\u0437\u043E\u0440\u0443\u0436\u0435\u043D"
+  _en: Disarmed
 --- !u!1 &6428653259908372874
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,6 @@ public class EnemySpawnPoint : MonoBehaviour
         GameObject tempEnemy = Instantiate(enemyPrefab,
             randomPoint,
             Quaternion.identity);
-
         //Поворот в сторону игрока
         Vector3 lookDirection = playerTransform.position - tempEnemy.transform.position;
         lookDirection.y = 0.0f;
@@ -34,7 +33,12 @@ public class EnemySpawnPoint : MonoBehaviour
         if(tempEnemy.TryGetComponent(out EnemyController enemy))
         {
             enemy.UnderGround(true);
-            enemy.SetTargetTransform(playerTransform);
+            enemy.SetTargetTransform(playerTransform);          
+        }
+        if (tempEnemy.TryGetComponent(out BossController boss))
+        {
+            Debug.Log("SetRotation");
+            boss.SetAntiPlayerDirection();
         }
     }
     Vector3 GenerateRandomPointInSphere(Vector3 center, float radius)

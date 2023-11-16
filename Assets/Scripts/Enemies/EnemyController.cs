@@ -34,6 +34,7 @@ public class EnemyController : MonoBehaviour, IDamagable
     protected bool isDeathAnimationEnd;
     protected Vector3 agentTarget;
     float spawnSpeed = 2f;
+    bool invicible;
 
     protected virtual void Awake()
     {
@@ -64,7 +65,7 @@ public class EnemyController : MonoBehaviour, IDamagable
     }  
     private void FixedUpdate()
     {
-        if (!isAlive && !isDeathAnimationEnd)
+        if (!isAlive && !isDeathAnimationEnd || invicible)
             return;
         //Движение к игроку по NavMesh на поверхности
         if (isFollowPlayer)
@@ -85,6 +86,8 @@ public class EnemyController : MonoBehaviour, IDamagable
     }
     public virtual void RecieveDamage(float damageValue)
     {
+        if (invicible)
+            return;
         currentHealth -= damageValue;
         if (StaticSettings.CanShowDamageNumber())
             canvasController.ShowDamageValueText(damageValue);
@@ -167,6 +170,8 @@ public class EnemyController : MonoBehaviour, IDamagable
     //В анимации EnemyAttackAnimation
     public void AttackPlayer()
     {
+        if (invicible)
+            return;
         attackController.TryAttackPlayer(damage);
     }
     //В анимации EnemyAttackAnimation
@@ -176,8 +181,9 @@ public class EnemyController : MonoBehaviour, IDamagable
     }
     void OnPlayerDied()
     {
-        NavmeshAgentState(false);
         attackController.SetPlayerInZone(false);
+        invicible = true;
+        NavmeshAgentState(false);
     }
     protected virtual void OnGameReseted()
     {

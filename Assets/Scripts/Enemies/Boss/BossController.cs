@@ -10,7 +10,7 @@ public class BossController : EnemyController, IDamagable
     bool isImmortal;
     float runAwayResetInterval = 5;
     bool isRunAway;
-    float runAwayResetTimer = 0f;
+    float runAwayResetTimer = 0.5f;
     [SerializeField] float runAwaySpeed;
     [SerializeField] float weaponRotationSpeed;
     [Header("ѕобег босса")]
@@ -20,8 +20,7 @@ public class BossController : EnemyController, IDamagable
     [SerializeField] float maxAngle;
     float timeSinceLastDirectionChange;
     Vector3 randomDirection;
-    float runRotationSpeed = 400;
- 
+    float runRotationSpeed = 400; 
     [Header("—сылки босса")]
     [SerializeField] GameObject weaponObject;
     [SerializeField] BossWeaponController weaponController;
@@ -39,7 +38,7 @@ public class BossController : EnemyController, IDamagable
         base.Start();
         ChangeImmotralState(true);
         UnderGround(true);
-        timeSinceLastDirectionChange = changeDirectionInterval;     
+        timeSinceLastDirectionChange = changeDirectionInterval;        
     }
 
     void Update()
@@ -52,11 +51,7 @@ public class BossController : EnemyController, IDamagable
         else animator.SetFloat("speed", agent.velocity.sqrMagnitude);
 
         if (isRunAway)
-        {
-            RunAwayChangeDirectionTimer();
-            animator.SetFloat("speed", rb.velocity.magnitude);
-            RunAwayResetTimer();
-        }
+            animator.SetFloat("speed", 1f);
     }
     private void FixedUpdate()
     {
@@ -78,6 +73,9 @@ public class BossController : EnemyController, IDamagable
         }
         if (canRunAway && isRunAway)
         {
+            RunAwayChangeDirectionTimer();
+            //animator.SetFloat("speed", rb.velocity.magnitude);
+            RunAwayResetTimer();
             RunAwayFromPlayer();
         }    
     }
@@ -91,6 +89,13 @@ public class BossController : EnemyController, IDamagable
         {
             StartCoroutine(StunProccess());
         }
+    }
+
+    public void SetAntiPlayerDirection()
+    {
+        weaponMovementController.SetAntiDirection(playerTransform.gameObject.
+            GetComponent<WeaponMovementController>().
+            GetRotationDirection());
     }
     IEnumerator StunProccess()
     {
@@ -124,7 +129,7 @@ public class BossController : EnemyController, IDamagable
     }
     void GetRandomDirection()
     {       
-        float randomAngle = Random.Range(minAngle, maxAngle); // случайное отклонение в градусах 
+        float randomAngle = Random.Range(minAngle, maxAngle);       // случайное отклонение в градусах 
         Vector3 directionToReferencePoint = transform.position - playerTransform.position;
         Quaternion randomRotation = Quaternion.Euler(0, randomAngle, 0);
         randomDirection = randomRotation * directionToReferencePoint;

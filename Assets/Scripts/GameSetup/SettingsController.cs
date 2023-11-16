@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
 {
-    public bool isDamageNumberShow;
-
+    [SerializeField] bool isDamageNumberShow;
+    [SerializeField] Toggle toggle;
     private void Start()
     {
-        
-    }
-    //По кнопке тоггла
-    public void ToggleDamageNumber()
-    {
-        isDamageNumberShow = !isDamageNumberShow;
+        toggle.isOn = Progress.Instance.playerInfo.isShowDamageNumber;
+        isDamageNumberShow = Progress.Instance.playerInfo.isShowDamageNumber;
         StaticSettings.isStaticDamageNumberShow = isDamageNumberShow;
+    }
+    
+    public void Toggle_Changed(bool newValue)
+    {
+        isDamageNumberShow = newValue;
+        StaticSettings.isStaticDamageNumberShow = isDamageNumberShow;
+        Progress.Instance.playerInfo.isShowDamageNumber = isDamageNumberShow;
     }
 }
 

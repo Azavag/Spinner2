@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System.Linq;
 
 public class AnimationController : MonoBehaviour
 {
     [Header("—сылки")]
-    [SerializeField] UInavigationController navigationController;
+    [SerializeField] InterfaceNavigationController navigationController;
     [SerializeField] KilledEnemiesCounting enemiesCounting;
+    [SerializeField] AdvManager advManager;
     [Header("ѕанель конца уровн€")]
     [SerializeField] Transform EndLevelPanel;
     [SerializeField] float inScaleAnimTime;
     [SerializeField] float outScaleAnimTime;
     [SerializeField] Transform[] textObjects;
+    [SerializeField] Transform acceptButton;
     [SerializeField] TextMeshProUGUI[] killedTypesTexts;
     [SerializeField] TextMeshProUGUI earnedCountText;   
     Sequence textShowSequence;
@@ -57,11 +60,14 @@ public class AnimationController : MonoBehaviour
            SetEase(Ease.OutBounce).OnComplete(ShowTextsInEndPanel).SetAutoKill();
         textShowSequence = DOTween.Sequence().SetAutoKill();
 
+        acceptButton.transform.localScale = Vector3.zero;
         foreach (Transform textObject in textObjects)
         {
             textObject.transform.localScale = Vector3.zero;          
             textShowSequence.Append(textObject.DOScale(1, textShowAnimTime).SetEase(Ease.OutQuad));
         }
+        textShowSequence.AppendInterval(2 * textShowAnimTime);
+        textShowSequence.OnComplete(Callback);
         for (int tempCounter = 0; tempCounter < killedTypesTexts.Length; tempCounter++)
         {
             killedTypesTexts[tempCounter].text =
@@ -69,6 +75,11 @@ public class AnimationController : MonoBehaviour
         }
         earnedCountText.text = enemiesCounting.GetLevelMoneyCount().ToString();
         EndLevelPanel.DOPlay();
+    }
+    void Callback()
+    {
+        advManager.ShowAdv();
+        acceptButton.DOScale(1, textShowAnimTime).SetEase(Ease.OutQuad).SetAutoKill().Play();
     }
     public void HideEndLevelPanel(TweenCallback tweenCallback)
     {

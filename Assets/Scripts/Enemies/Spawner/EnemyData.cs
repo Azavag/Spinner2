@@ -76,37 +76,59 @@ public class EnemyData : MonoBehaviour
     }
     public void CheckLevelForHealth(int level)
     {
-        foreach (var grade in healthGrades)
+        int lastElementNumber = healthGrades.Length - 1;
+        for (int i = 0; i <= lastElementNumber; i++)
         {
-            if (level == grade.level)
+            if (level >= healthGrades[lastElementNumber].level)
             {
-                enemyMaxHealth = grade.enemyMaxHealthData;
-                minibossMaxHealth = grade.minibossMaxHealthData;
-                bossMaxHealth = grade.bossMaxHealthData;
+                enemyMaxHealth = healthGrades[lastElementNumber].enemyMaxHealthData;
+                minibossMaxHealth = healthGrades[lastElementNumber].minibossMaxHealthData;
+                bossMaxHealth = healthGrades[lastElementNumber].bossMaxHealthData;
+                return;
+            }
+            if (level >= healthGrades[i].level && level <= healthGrades[i + 1].level)
+            {
+                enemyMaxHealth = healthGrades[i].enemyMaxHealthData;
+                minibossMaxHealth = healthGrades[i].minibossMaxHealthData;
+                bossMaxHealth = healthGrades[i].bossMaxHealthData;
                 return;
             }
         }
     }
     public void CheckLevelForRotationSpeed(int level)
     {
-        foreach (var grade in rotationSpeedGrades)
+        int lastElementNumber = rotationSpeedGrades.Length - 1;
+        for (int i = 0; i <= lastElementNumber; i++)
         {
-            if (level == grade.level)
+            if(level >= rotationSpeedGrades[lastElementNumber].level)
             {
-                minibossWeaponRotation = grade.minibossWeaponRotationData;
-                bossWeaponRotation = grade.bossWeaponRotationData;
+                minibossWeaponRotation = rotationSpeedGrades[lastElementNumber].minibossWeaponRotationData;
+                bossWeaponRotation = rotationSpeedGrades[lastElementNumber].bossWeaponRotationData;
+                return;
+            }
+            if (level >= rotationSpeedGrades[i].level && level <= rotationSpeedGrades[i+1].level)
+            {
+                minibossWeaponRotation = rotationSpeedGrades[i].minibossWeaponRotationData;
+                bossWeaponRotation = rotationSpeedGrades[i].bossWeaponRotationData;
                 return;
             }
         }
     }
     public void CheckLevelForDurability(int level)
     {
-        foreach (var grade in weaponDurabilitydGrades)
+        int lastElementNumber = weaponDurabilitydGrades.Length - 1;
+        for (int i = 0; i <= lastElementNumber; i++)
         {
-            if (level == grade.level)
+            if (level >= weaponDurabilitydGrades[lastElementNumber].level)
             {
-                minibossWeaponDurability = grade.minibossWeaponDurabilityData;
-                bossWeaponDurability = grade.bossWeaponDurabilityData;
+                minibossWeaponDurability = weaponDurabilitydGrades[lastElementNumber].minibossWeaponDurabilityData;
+                bossWeaponDurability = weaponDurabilitydGrades[lastElementNumber].bossWeaponDurabilityData;
+                return;
+            }
+            if (level >= weaponDurabilitydGrades[i].level && level <= weaponDurabilitydGrades[i + 1].level)
+            {
+                minibossWeaponDurability = weaponDurabilitydGrades[i].minibossWeaponDurabilityData;
+                bossWeaponDurability = weaponDurabilitydGrades[i].bossWeaponDurabilityData;
                 return;
             }
         }

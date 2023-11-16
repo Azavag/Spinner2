@@ -10,35 +10,38 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] Image healthSlider;
     [SerializeField] GameController gameController;
     [SerializeField] SoundController soundController;
+    [SerializeField] PlayerCanvasController canvasController;
     Animator animator;
-    Rigidbody rb;
     PlayerMovement playerMovement;
     [SerializeField] WeaponMovementController weaponMovementController;
     [SerializeField] PlayerWeaponController weaponController;
     [SerializeField] Vector3 startCoordinates;
     [Header("Характеристики")]
-    [SerializeField] float enemyDamage;
-    [SerializeField] float moveSpeed;
-    [SerializeField] float rotaionSpeed;                    //Старт 200
-    [SerializeField] float maxHealth;
+    [SerializeField] float enemyDamage = 10;                     //Старт - 10
+    [SerializeField] float moveSpeed = 70;                       //Старт - 70
+    [SerializeField] float rotaionSpeed = 200;                    //Старт - 200
+    [SerializeField] float maxHealth;       
     [SerializeField] float currentHealth;
     float weaponDamage = 1;
     [SerializeField] float immortalityInterval = 1.5f;             //Время неузвимости
-    bool isImmortal;
+    public bool isImmortal;
     float immortalityTimer;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+        canvasController = GetComponentInChildren<PlayerCanvasController>();
     }
     void Start()
-    {       
+    {
+        enemyDamage = Progress.Instance.playerInfo.playerDamage;
+        rotaionSpeed = Progress.Instance.playerInfo.playerRotation;
+        moveSpeed = Progress.Instance.playerInfo.playerSpeed;
         weaponMovementController.SetRotationSpeed(rotaionSpeed);       
         weaponController.SetEnemyDamage(enemyDamage);
         weaponController.SetWeaponDamage(weaponDamage);
-        
+        playerMovement.enabled = false;
         ResetHealth();
     }
     private void Update()
@@ -58,6 +61,7 @@ public class PlayerController : MonoBehaviour, IDamagable
             return;
 
         currentHealth -= damageValue;
+        canvasController.ShowDamageValueText(damageValue);
         healthSlider.fillAmount = currentHealth / maxHealth;
         soundController.Play("PlayerTakeDamage");
         if (currentHealth <= 0)
@@ -69,27 +73,27 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
     IEnumerator DeathProccess()
     {
-        playerMovement.SwitchInput(false);
+        //playerMovement.SwitchInput(false);
+        playerMovement.enabled = false;
+        animator.SetFloat("speed", 0);
         animator.SetBool("isDeath", true);
         GetComponent<Collider>().enabled = false;
         EventManager.InvokePlayerDied();
         weaponController.ShowWeaponModel(false);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.5f);
         gameController.EndLevel(false);
         yield return null;
     }
     //Восстановление персонажа
     public void ResetPlayer()
-    {
-        weaponController.ShowWeaponModel(true);
+    {       
+        transform.position = Vector3.zero;
         animator.SetBool("isDeath", false);
-        ResetPosition();
+        animator.SetFloat("speed", 0);
         ResetHealth();
         GetComponent<BoxCollider>().enabled = true;
-    }
-    public void ResetPosition()
-    {
-        transform.position = startCoordinates;
+        weaponController.ShowWeaponModel(true);
+        isImmortal = false;
     }
     public void ResetHealth()
     {
@@ -104,16 +108,14 @@ public class PlayerController : MonoBehaviour, IDamagable
             immortalityTimer = immortalityInterval;
         }
         animator.SetBool("isImmortal", isImmortal);
+    }
 
-    }
-    public bool GetInvulmmortality()
-    {
-        return isImmortal;
-    }
     //Скорость вращения оружия
     public void ChangeRotationSpeed(float rotationSpeedDiff)
     {
         rotaionSpeed += rotationSpeedDiff;
+        Progress.Instance.playerInfo.playerRotation = rotaionSpeed;
+        YandexSDK.Save();
         weaponMovementController.SetRotationSpeed(rotaionSpeed);
     }
     //Скорость перемещения
@@ -124,6 +126,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     public void ChangeMovementSpeed(float moveSpeedDiff)
     {
         moveSpeed += moveSpeedDiff;
+        Progress.Instance.playerInfo.playerSpeed = moveSpeed;
+        YandexSDK.Save();
         playerMovement.SetMovementSpeed(moveSpeed);
     }
     //Урон по противнику
@@ -131,12 +135,14 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         return enemyDamage;
     }
-    public void ChangeEnemyDamage(float enemyDamageDiff)
+    public void ChangeEnemyDamage(float damageDiff)
     {
-        enemyDamage += enemyDamageDiff;
+        enemyDamage += damageDiff;
+        Progress.Instance.playerInfo.playerDamage = enemyDamage;
+        YandexSDK.Save();
         weaponController.SetEnemyDamage(enemyDamage);
     }
-    //урон по оружию(Скорее всего статичный = 1)
+    //урон по оружию
     public float GetWeaponDamage()
     {
         return weaponDamage;

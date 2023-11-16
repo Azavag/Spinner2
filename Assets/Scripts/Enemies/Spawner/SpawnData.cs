@@ -34,11 +34,13 @@ public class SpawnData : MonoBehaviour
     {
         switch (currentLevel)
         {
-            case >= 0 and <= 20: return 1;
+            case >= 0 and <= 4: return 0;
+            case > 4 and <= 20: return 1;
             case > 20 and <= 40: return 2;
             case > 40 and <= 60: return 3;
             case > 60 and <= 80: return 4;
             case > 80 and < 100: return 5;
+            case > 100: return 6;
             default: return 0;
         }
     }
@@ -46,7 +48,7 @@ public class SpawnData : MonoBehaviour
     {
         switch (currentLevel)
         {
-            case >= 0 and < 100: return 1;
+            case >= 0: return 1;
             default: return 0;
         }
     }

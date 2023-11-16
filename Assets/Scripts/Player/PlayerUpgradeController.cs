@@ -31,12 +31,12 @@ public class PlayerUpgradeController : MonoBehaviour
     [SerializeField] Button rotationUpgradeButton;
     [SerializeField] Button damageUpgradeButton;
     [Header("Текстовые счётчики")]
-    [SerializeField] TextMeshProUGUI movementSpeedPriceText;
-    [SerializeField] TextMeshProUGUI rotationSpeedPriceText;
+    [SerializeField] TextMeshProUGUI speedPriceText;
+    [SerializeField] TextMeshProUGUI rotationPriceText;
     [SerializeField] TextMeshProUGUI damagePriceText;
-    int movementSpeedUpgradeCounter;
-    int rotationSpeedUpgradeCounter;
-    int enemyDamageUpgradeCounter;
+    int movementSpeedUpgradeCounter =0;
+    int rotationSpeedUpgradeCounter = 0;
+    int enemyDamageUpgradeCounter = 0;
     int maxUpgradeCount = 50;
     [Header("Оружия")]
     [SerializeField] PlayerWeaponGrades[] weaponGrades;
@@ -53,6 +53,10 @@ public class PlayerUpgradeController : MonoBehaviour
         {
             grade.weaponModel.SetActive(false);
         }
+        movementSpeedUpgradeCounter = Progress.Instance.playerInfo.speedUpgradeLevel;
+        rotationSpeedUpgradeCounter = Progress.Instance.playerInfo.rotationUpgradeLevel;
+        enemyDamageUpgradeCounter = Progress.Instance.playerInfo.damageUpgradeLevel;
+        weaponModelCounter = Progress.Instance.playerInfo.weaponModelNumber;
         WearWeapon(weaponModelCounter);     
     }
 
@@ -68,6 +72,8 @@ public class PlayerUpgradeController : MonoBehaviour
             if (upgradeLevel == grade.level)
             {
                 weaponModelCounter++;
+                Progress.Instance.playerInfo.weaponModelNumber = weaponModelCounter;
+                YandexSDK.Save();
                 currentWeaponModel.SetActive(false);
                 canvasController.ShowWeaponUpgradeText(grade.weaponNameText);
                 if(grade.weaponNameText.text != "")
@@ -84,8 +90,7 @@ public class PlayerUpgradeController : MonoBehaviour
         movementSpeedUpgradeCounter++;
         if(movementSpeedUpgradeCounter == maxUpgradeCount)
         {
-            speedUpgradeButton.interactable = false;
-            UpdateText(movementSpeedPriceText);
+            BlockSpeedUpgradeButton();
             return;
         }
 
@@ -96,8 +101,7 @@ public class PlayerUpgradeController : MonoBehaviour
         rotationSpeedUpgradeCounter++;
         if (rotationSpeedUpgradeCounter == maxUpgradeCount)
         {
-            rotationUpgradeButton.interactable = false;
-            UpdateText(rotationSpeedPriceText);
+            BlockRotationUpgradeButton();
             return;
         }
     }
@@ -108,14 +112,31 @@ public class PlayerUpgradeController : MonoBehaviour
         CheckOnSwapWeapons(enemyDamageUpgradeCounter);
         if (enemyDamageUpgradeCounter == maxUpgradeCount)
         {
-            damageUpgradeButton.interactable = false;
-            UpdateText(damagePriceText);
+            BlockDamageUpgradeButton();
             return;
         }
     }
 
+    public void BlockSpeedUpgradeButton()
+    {        
+        speedUpgradeButton.interactable = false;
+        UpdateText(speedPriceText);
+    }
+    public void BlockRotationUpgradeButton()
+    {
+        rotationUpgradeButton.interactable = false;
+        UpdateText(rotationPriceText);
+    }
+    public void BlockDamageUpgradeButton()
+    {
+        damageUpgradeButton.interactable = false;
+        UpdateText(damagePriceText);
+    }
+
     void UpdateText(TextMeshProUGUI text)
     {
-        text.text = "макс";
+        if (Language.Instance.currentLanguage == "ru")
+            text.text = "макс";
+        else text.text = "max";
     }
 }

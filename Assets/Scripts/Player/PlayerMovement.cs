@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable ()
     {
-        rb.isKinematic = false;                       
+       // rb.isKinematic = false;                       
     }   
         
     private void FixedUpdate ()

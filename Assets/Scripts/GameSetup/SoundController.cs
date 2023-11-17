@@ -94,14 +94,18 @@ public class SoundController : MonoBehaviour
     private void OnApplicationFocus(bool focus)
     {       
         Silence(!focus);
+#if !Unity_EDITOR
         if (!focus)
             gameController.SetPause();
+#endif
     }
     private void OnApplicationPause(bool pause)
     {
         Silence(pause);
+#if !Unity_EDITOR
         if (pause)
             gameController.SetPause();
+#endif
     }
     void Silence(bool silence)
     {

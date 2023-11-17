@@ -50,7 +50,6 @@ public class EnemyController : MonoBehaviour, IDamagable
     }
     protected virtual void Start()
     {        
-        rb.isKinematic = true;
         agent.speed = startAgentSpeed;
         isAlive = true;
         agent.enabled = false;

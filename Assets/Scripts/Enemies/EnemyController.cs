@@ -113,8 +113,8 @@ public class EnemyController : MonoBehaviour, IDamagable
     }
     protected void DisableComponents()
     {
-        isAlive = false;
         NavmeshAgentState(false);
+        isAlive = false;
         agent.enabled = false;
         GetComponent<Collider>().enabled = false;
         EventManager.InvokeEnemyTypeDied(enemyType);
@@ -126,7 +126,7 @@ public class EnemyController : MonoBehaviour, IDamagable
         Vector3 movementVector = Vector3.up;
         rb.MovePosition(transform.position + movementVector * spawnSpeed * Time.deltaTime);
     }
-    protected void CheckGround()
+    protected virtual void CheckGround()
     {
         if (transform.position.y >= 0)
         {

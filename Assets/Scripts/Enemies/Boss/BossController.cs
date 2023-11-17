@@ -32,6 +32,7 @@ public class BossController : EnemyController, IDamagable
     {
         base.Awake();
         bossCanvasController = GetComponentInChildren<BossCanvasController>();
+        weaponController.ShowWeaponModel(false);
     }
     protected override void Start()
     {
@@ -74,7 +75,6 @@ public class BossController : EnemyController, IDamagable
         if (canRunAway && isRunAway)
         {
             RunAwayChangeDirectionTimer();
-            //animator.SetFloat("speed", rb.velocity.magnitude);
             RunAwayResetTimer();
             RunAwayFromPlayer();
         }    
@@ -91,6 +91,13 @@ public class BossController : EnemyController, IDamagable
         }
     }
 
+
+    protected override void CheckGround()
+    {
+        base.CheckGround();
+        if(!underGround)
+            weaponController.ShowWeaponModel(true);
+    }
     public void SetAntiPlayerDirection()
     {
         weaponMovementController.SetAntiDirection(playerTransform.GetComponent<PlayerController>()

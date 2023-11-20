@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         canvasController.ShowDamageValueText(damageValue);
         healthBar.ChangeCurrentHealthValue(currentHealth);
         soundController.Play("PlayerTakeDamage");
-        if (currentHealth <= 0)
+        if (currentHealth == 0)
         {
             StartCoroutine(DeathProccess());
             return;
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         playerMovement.enabled = false;
         animator.SetFloat("speed", 0);
         animator.SetBool("isDeath", true);
-        GetComponent<Collider>().enabled = false;
+        //GetComponent<Collider>(). = false;
         EventManager.InvokePlayerDied();
         healthBar.gameObject.SetActive(false);
         weaponController.ShowWeaponModel(false);

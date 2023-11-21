@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] float immortalityInterval = 1.5f;             //Время неузвимости
     public bool isImmortal;
     float immortalityTimer;
+    public bool isAlive;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         weaponMovementController.SetRotationSpeed(rotaionSpeed);       
         weaponController.SetEnemyDamage(enemyDamage);
         weaponController.SetWeaponDamage(weaponDamage);
+
         playerMovement.enabled = false;
         healthBar.SetSliderMaxValue(maxHealth);
         ResetHealth();
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void RecieveDamage(float damageValue)
     {
-        if (isImmortal)
+        if (isImmortal || !isAlive)
             return;
 
         currentHealth -= damageValue;
@@ -77,7 +79,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         playerMovement.enabled = false;
         animator.SetFloat("speed", 0);
         animator.SetBool("isDeath", true);
-        //GetComponent<Collider>(). = false;
+        isAlive = false;
+
         EventManager.InvokePlayerDied();
         healthBar.gameObject.SetActive(false);
         weaponController.ShowWeaponModel(false);
@@ -98,6 +101,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
     public void ResetHealth()
     {
+        isAlive = true;
         healthBar.gameObject.SetActive(true);
         currentHealth = maxHealth;
         healthBar.ResetSlider();

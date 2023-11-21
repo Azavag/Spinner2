@@ -33,23 +33,20 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
- 
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
         if (isJoystickActive) 
         {
             horizontalInput = joystick.Horizontal;
             verticalInput = joystick.Vertical;
         }           
+        Debug.Log(horizontalInput + " " + verticalInput);
     }
     public void SetActiveJoystick(bool state)
     {
         isJoystickActive = state;
-    }
-    private void OnEnable ()
-    {
-       // rb.isKinematic = false;                       
-    }   
+    }  
         
     private void FixedUpdate ()
     {
